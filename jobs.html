@@ -43,8 +43,9 @@ dialog{width:min(840px,calc(100vw - 24px));max-height:calc(100dvh - 28px);border
   lastButton=button;for(const b of map.querySelectorAll('.role'))b.setAttribute('aria-pressed',String(b===button));
   document.getElementById('job-title').textContent=job.title;dialog.querySelector('.organization').textContent=job.organization;
   dialog.querySelector('.bands').replaceChildren(node('span',A[job.a]),node('span',B[job.b]));
-  const cv=dialog.querySelector('.cv-links');cv.replaceChildren();cv.hidden=!job.documents.length;
-  if(job.documents.length){cv.append(node('h3','קורות חיים'));const primary=job.documents.filter(d=>d.primary);for(const d of primary)cv.append(cvLink(d,d.kind==='clean'?'קורות חיים · גרסה נקייה':d.kind==='annotated'?'קורות חיים · עם הערות':'פתיחת קורות חיים','cv-link'));const additional=job.documents.filter(d=>!d.primary);if(additional.length){const more=node('details',null,'cv-more');more.append(node('summary','גרסאות נוספות'));for(const d of additional)more.append(cvLink(d,d.filename,'cv-version'));cv.append(more);}}
+  const documents=job.documents.filter(d=>d.kind!=='clean');
+  const cv=dialog.querySelector('.cv-links');cv.replaceChildren();cv.hidden=!documents.length;
+  if(documents.length){cv.append(node('h3','קורות חיים'));const primary=documents.filter(d=>d.primary);for(const d of primary)cv.append(cvLink(d,d.kind==='annotated'?'קורות חיים · עם הערות':'פתיחת קורות חיים','cv-link'));const additional=documents.filter(d=>!d.primary);if(additional.length){const more=node('details',null,'cv-more');more.append(node('summary','גרסאות נוספות'));for(const d of additional)more.append(cvLink(d,d.filename,'cv-version'));cv.append(more);}}
   const article=dialog.querySelector('.description');article.replaceChildren();article.lang=job.language;article.dir=job.language==='he'?'rtl':'ltr';description(job.description,article);
   dialog.showModal();dialog.scrollTop=0;dialog.querySelector('.close').focus();
  }
